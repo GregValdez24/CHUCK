@@ -4,6 +4,7 @@
 //
 //  Created by Greg Valdez on 1/21/25.
 //
+// Mostly all things will go her in this VIEW
 
 import SwiftUI
 
