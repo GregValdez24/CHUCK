@@ -12,19 +12,29 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Welcome to CHUCK!")
+                Text("Welcome Back!")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .frame(maxHeight: .infinity, alignment: .top)
             }
             
             .toolbar {
                 NavigationLink {
-                    Text ("Welcome Back!")
-                } label : {
+                    Text ("CHUCK Log In")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                }
+                label : {
                     Text("Log In")
                 }
             }
             
-            .padding()
+            .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("Home")
+            .padding()
         }
     }
 }
