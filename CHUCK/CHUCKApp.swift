@@ -13,7 +13,7 @@ import SwiftUI
 struct CHUCKApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomePage()
         }
     }
 }
