@@ -119,7 +119,7 @@ struct ButtonView: View {
 struct MainFeatureView: View {
     var feature: String
     @Binding var selectedApps: Set<AppModel>
-    var availableApps: [AppModel]  // availableApps should be passed here
+    var availableApps: [AppModel]
 
     var body: some View {
         if feature == "Create Roster" {

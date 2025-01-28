@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-// Model for an App
 struct AppModel: Identifiable, Hashable, Decodable, Encodable {
-    var id: UUID  // Change from 'let' to 'var'
+    var id: UUID
     let name: String
 
     init(id: UUID = UUID(), name: String) {

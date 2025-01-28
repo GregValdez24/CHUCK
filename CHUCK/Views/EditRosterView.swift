@@ -4,6 +4,7 @@
 //
 //  Created by Greg Valdez on 1/28/25.
 //
+
 import SwiftUI
 import FamilyControls
 
@@ -14,7 +15,7 @@ struct EditRosterView: View {
     @State private var isEditing: Bool = false
     @State private var selection = FamilyActivitySelection()
 
-    var availableApps: [AppModel]  // Pass this data into the view
+    var availableApps: [AppModel]
 
     var body: some View {
         VStack {
@@ -85,21 +86,18 @@ struct EditRosterView: View {
         }
     }
 
-    // Add an app to the selected roster
     private func addAppToRoster(_ app: AppModel) {
         guard var selectedRoster = selectedRoster else { return }
         selectedRoster.apps.insert(app)
         self.selectedRoster = selectedRoster
     }
 
-    // Remove an app from the selected roster
     private func removeAppFromRoster(_ app: AppModel) {
         guard var selectedRoster = selectedRoster else { return }
         selectedRoster.apps.remove(app)
         self.selectedRoster = selectedRoster
     }
 
-    // Save the modified roster
     private func saveRosterChanges() {
         guard let selectedRoster = selectedRoster else { return }
 
