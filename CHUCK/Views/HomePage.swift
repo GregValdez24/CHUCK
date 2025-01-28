@@ -18,7 +18,7 @@ struct HomePage: View {
         NavigationStack {
             VStack {
                 if userRole.isEmpty {
-                    Text("Welcome Back!")
+                    Text("Welcome!")
                         .font(.title2)
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
