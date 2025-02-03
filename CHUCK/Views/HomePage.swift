@@ -84,12 +84,7 @@ struct HomePage: View {
                                 .padding(.top, 20)
                             }
                         } else {
-//                            NavigationLink("Blocked Apps", destination: AppSelectionView(selectedApps: $selectedApps))
-//                                .padding()
-//                                .background(Color.purple)
-//                                .foregroundColor(.white)
-//                                .cornerRadius(10)
-//                                .padding(.top)
+                            //currently empty.
                         }
                     }
                 }
