@@ -1,5 +1,5 @@
 //
-//  AppSelectionView 2.swift
+//  AppSelectionView.swift
 //  CHUCK
 //
 //  Created by Greg Valdez on 1/28/25.
@@ -11,32 +11,55 @@ import FamilyControls
 struct AppSelectionView: View {
     @State private var selection = FamilyActivitySelection()
     @Binding var selectedApps: Set<AppModel>
-    
+
     var availableApps: [AppModel]
+
     var body: some View {
         VStack {
-            FamilyActivityPicker(selection: $selection)
-                .onChange(of: selection) { oldSelection, newSelection in
-                    saveSelectedApps(newSelection)
-                }
+            GeometryReader { geometry in
+                FamilyActivityPicker(selection: $selection)
+                    .frame(height: max(geometry.size.height, 400))
+                    .onChange(of: selection) { _, newSelection in
+                        print("Picker Selection Changed!")
+                        print("New Selection Count: \(newSelection.applications.count)")
+                        for app in newSelection.applications {
+                            print("Selected App: \(app.localizedDisplayName ?? "Unknown App") - Bundle ID: \(app.bundleIdentifier ?? "No Bundle ID")")
+                        }
+                        DispatchQueue.main.async {
+                            saveSelectedApps(newSelection)
+                        }
+                    }
+            }
+            .frame(height: 400)
             
-            Text("Selected Apps: \(selection.applications.count) apps selected")
+            Text("Picker Selection Count: \(selection.applications.count)")
                 .padding()
+                .onAppear {
+                    print("Initial Picker Selection Count: \(selection.applications.count)")
+                }
 
-            List(availableApps, id: \.id) { app in
+//            Text("Selected Apps: \(selectedApps.count) apps selected")
+//                .padding()
+
+            List(Array(selectedApps), id: \.id) { app in
                 Text(app.name)
             }
         }
         .padding()
     }
 
-    func saveSelectedApps(_ selection: FamilyActivitySelection) {
+    private func saveSelectedApps(_ selection: FamilyActivitySelection) {
+        var newApps: Set<AppModel> = []
+
         for app in selection.applications {
-            print(app)
-            
-            //need to debug this 
+            if let bundleID = app.bundleIdentifier {
+                let appModel = AppModel(id: bundleID, name: app.localizedDisplayName ?? "Unknown App")
+                newApps.insert(appModel)
+            }
+        }
+
+        DispatchQueue.main.async {
+            self.selectedApps = newApps
         }
     }
-
 }
-

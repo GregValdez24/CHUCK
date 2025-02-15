@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomePage: View {
-    @AppStorage("userRole") private var userRole: String = ""
+    @AppStorage("userRole") private var userRole: String = "parent" //default to parent mode, abstract mode selection
     @State private var selectedApps: Set<AppModel> = []
     @State private var availableApps: [AppModel] = []  // availableApps needs to be defined
 
@@ -17,83 +17,49 @@ struct HomePage: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if userRole.isEmpty {
-                    Text("Welcome!")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.purple)
-                        .padding(.top)
-                }
-
-                if !userRole.isEmpty {
-                    HStack {
-                        // Current Mode text
-                        Text("Current Mode: \(userRole == "parent" ? "Editing" : "Locking In")")
-                            .font(.title3)
-                            .padding(.top)
-                            .foregroundColor(.purple)
-
-                        Spacer()
-
-                        NavigationLink(destination: RoleSelectionView()) {
-                            Button("Change Mode") {
-                                userRole = ""
-                            }
-                            .padding()
-                            .background(Color.purple)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding(.top)
-                            .padding(.trailing)
+                Text("Manage Your Rosters")
+                    .font(.title2)
+                    .foregroundColor(.purple)
+                    .padding(.top)
+                
+                let columns = [GridItem(.flexible()), GridItem(.flexible())]
+                
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(buttons, id: \.self) { buttonTitle in
+                        NavigationLink(destination: getDestination(for: buttonTitle)) { 
+                            ButtonView(title: buttonTitle)
                         }
                     }
                 }
-
-                if userRole.isEmpty {
-                    Text("Please select your Mode:")
-                        .font(.title3)
-                        .padding()
-
-                    NavigationLink("Select Your Mode", destination: RoleSelectionView())
-                        .padding()
-                        .background(Color.purple)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                } else {
-                    VStack {
-                        if userRole == "parent" {
-                            VStack {
-                                Text("Manage Your Rosters")
-                                    .font(.title2)
-                                    .foregroundColor(.purple)
-                                    .padding(.top)
-
-                                let columns = [
-                                    GridItem(.flexible()),
-                                    GridItem(.flexible())
-                                ]
-
-                                LazyVGrid(columns: columns, spacing: 20) {
-                                    ForEach(buttons, id: \.self) { buttonTitle in
-                                        NavigationLink(destination: MainFeatureView(feature: buttonTitle, selectedApps: $selectedApps, availableApps: availableApps)) {
-                                            ButtonView(title: buttonTitle)
-                                        }
-                                    }
-                                }
-                                .padding(.top, 20)
-                            }
-                        } else {
-                            //currently empty.
-                        }
-                    }
-                }
+                .padding(.top, 20)
             }
             .padding()
             .frame(maxHeight: .infinity, alignment: .top)
         }
     }
+    
+    @ViewBuilder
+    private func getDestination(for buttonTitle: String) -> some View {
+        if buttonTitle == "Create Roster" {
+            CreateRosterView(selectedApps: $selectedApps, availableApps: availableApps)
+        }
+        else if buttonTitle == "Chuck Roster" {
+            ChuckRosterView(activateChildMode: activateChildMode)
+        } else {
+            Text("You selected \(buttonTitle)")
+                .font(.title2)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .padding()
+        }
+    }
+
+    private func activateChildMode() {
+        userRole = "child"
+    }
 }
+
 
 struct ButtonView: View {
     var title: String
@@ -108,25 +74,6 @@ struct ButtonView: View {
             .cornerRadius(12)
             .padding()
             .accessibilityLabel("\(title) button")
-    }
-}
-
-struct MainFeatureView: View {
-    var feature: String
-    @Binding var selectedApps: Set<AppModel>
-    var availableApps: [AppModel]
-
-    var body: some View {
-        if feature == "Create Roster" {
-            CreateRosterView(selectedApps: $selectedApps, availableApps: availableApps)
-        } else {
-            Text("You selected \(feature)")
-                .font(.title2)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-                .frame(maxHeight: .infinity, alignment: .top)
-                .padding()
-        }
     }
 }
 

@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct AppModel: Identifiable, Hashable, Decodable, Encodable {
-    var id: UUID
+struct AppModel: Identifiable, Hashable, Codable {
+    var id: String
     let name: String
 
-    init(id: UUID = UUID(), name: String) {
+    init(id: String, name: String) {
         self.id = id
         self.name = name
     }
